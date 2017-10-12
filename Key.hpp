@@ -9,7 +9,7 @@ namespace ark {
 			keyup_arr.fill(false);
 			keydown_arr.fill(false);
 		}
-		const bool KeyDown(const int key, const bool cond) {
+		const bool KeyDown(const int key, const bool cond = true) {
 			GetAsyncKeyState(key);
 			if (GetAsyncKeyState(key)) {
 				bool result;
