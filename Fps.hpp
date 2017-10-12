@@ -17,7 +17,7 @@ namespace ark {
 	public:
 
 		Fps() :Fps(60.0) {}
-		Fps(double _fps) :fps(_fps), starttime(std::chrono::steady_clock::now()) {}
+		Fps(const double _fps) :fps(_fps), starttime(std::chrono::steady_clock::now()) {}
         	auto Now(){
         	    return std::chrono::steady_clock::now();
         	}
