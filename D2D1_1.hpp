@@ -1,6 +1,7 @@
 #pragma once
 #include<wrl.h>
 #include<atlbase.h>
+#incude<tchar.h>
 /*Include(WIC)*/
 #include<wincodec.h>
 #include<wincodecsdk.h>
