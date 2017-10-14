@@ -115,6 +115,10 @@ namespace ark {
 				DXGISwapChain->Present1(1, 0, &parameters);
 			}
 		}
+		void Initialize() {
+			if (hwnd == nullptr) hwnd = GetActiveWindow();
+			CreateD2DResource(hwnd);
+		}
 		void DrawClear(COLORREF color) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
