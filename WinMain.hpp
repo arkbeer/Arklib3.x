@@ -1,6 +1,6 @@
 #pragma once
-#include<iostream>
 #include<windows.h>
+#include<tchar.h>
 namespace ark {
 	class WinClass {
 		static const auto CreateWndClassEx() {
