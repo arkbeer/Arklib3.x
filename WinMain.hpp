@@ -162,10 +162,10 @@ namespace ark {
 		
 		static auto& LockAspectRatio(const float xratio, const float yratio) {
 			RECT rc;
-			GetClientRect(Ark::WinClass::GethWnd(), &rc);
+			GetClientRect(ark::WinClass::GethWnd(), &rc);
 			auto pair = ptr->trans(rc.right, rc.bottom, xratio, yratio);
 			if (!(pair.first == rc.right && pair.second == rc.bottom)) {
-				Ark::WinClass::SetSize(pair.first, pair.second);
+				ark::WinClass::SetSize(pair.first, pair.second);
 			}
 			return *ptr;
 		}
