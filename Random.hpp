@@ -1,4 +1,5 @@
 #pragma once
+#include<random>
 namespace ark {
 	class Random {
 		std::mt19937 mt;

@@ -22,6 +22,7 @@ namespace ark {
         	    return std::chrono::steady_clock::now();
         	}
 		void SetFps(const double _fps){ fps=_fps; }
+		auto GetFps() { return fps; }
 		void Count() {
 			while (needed() < 0)std::this_thread::sleep_for(std::chrono::duration<int>(static_cast<int>(1 / fps)));
 			starttime = std::chrono::steady_clock::now();

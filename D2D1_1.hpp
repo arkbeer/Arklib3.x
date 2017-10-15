@@ -1,7 +1,7 @@
 #pragma once
 #include<wrl.h>
 #include<atlbase.h>
-#incude<tchar.h>
+#include<tchar.h>
 /*Include(WIC)*/
 #include<wincodec.h>
 #include<wincodecsdk.h>
@@ -65,7 +65,7 @@ namespace ark {
 				desc.BufferCount = 2;
 				desc.Scaling = DXGI_SCALING_NONE;
 				desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-				DXGIFactory->CreateSwapChainForHwnd(D3D11Device.Get(), hwnd, &desc, nullptr, nullptr, &DXGISwapChain);
+				auto hr=DXGIFactory->CreateSwapChainForHwnd(D3D11Device.Get(), hwnd, &desc, nullptr, nullptr, &DXGISwapChain);
 				DXGISwapChain->GetBuffer(0, IID_PPV_ARGS(&DXGISurface));
 				D2DFactory->CreateDevice(DXGIDevice.Get(), &D2DDevice);
 				D2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &D2DContext);
