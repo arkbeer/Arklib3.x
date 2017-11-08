@@ -36,18 +36,17 @@ namespace ark {
 			RECT rect;
 			GetClientRect(hwnd, &rect);
 			if (!CompareRect(size, rect) && D2DContext && DXGISwapChain) {
-				/*D2DContext.ReleaseAndGetAddressOf();
-				D2DSCBrush.ReleaseAndGetAddressOf();
-				DXGISwapChain.ReleaseAndGetAddressOf();*/
 				Microsoft::WRL::ComPtr<IDXGIDevice1> DXGIDevice;
 				Microsoft::WRL::ComPtr<ID2D1Bitmap1> D2DBitmap;
 				Microsoft::WRL::ComPtr<IDXGIFactory2> DXGIFactory;
 				Microsoft::WRL::ComPtr<IDXGISurface> DXGISurface;
+				D2DContext->SetTarget(nullptr);
+				const auto br=DXGISwapChain->ResizeBuffers(0,0,0, DXGI_FORMAT_UNKNOWN,0);
 				DXGISwapChain->GetBuffer(0, IID_PPV_ARGS(&DXGISurface));
 				const auto bp = D2D1::BitmapProperties1(D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW, D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE));
 				D2DContext->CreateBitmapFromDxgiSurface(DXGISurface.Get(), &bp, &D2DBitmap);
 				D2DContext->SetTarget(D2DBitmap.Get());
-
+				GetClientRect(hwnd, &size);
 			}
 			if (!D2DContext || !DXGISwapChain) {
 				D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&D2DFactory));
