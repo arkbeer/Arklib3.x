@@ -21,8 +21,8 @@ namespace ark {
 			LPCTSTR lpCmdLine;
 			int nCmdShow;
 		};
-		WNDCLASSEX WndClass_Ex;
-		WinMainArguments WinMain_Arg;
+		WNDCLASSEX wndclassex;
+		WinMainArguments args;
 		static WinClass* ptr;
 		static HWND hWnd;
 		static bool endflag;
@@ -48,15 +48,15 @@ namespace ark {
 			HINSTANCE hinst = GetModuleHandle(nullptr);
 			ptr = this;
 			endflag = false;
-			WinMain_Arg.hInstance = hinst;
-			WinMain_Arg.hPrevInstance = nullptr;
-			WinMain_Arg.lpCmdLine = GetCommandLine();
-			WinMain_Arg.nCmdShow = SW_SHOWDEFAULT;
-			WndClass_Ex = wex;
-			WndClass_Ex.hInstance =hinst;
-			WndClass_Ex.lpfnWndProc = CallProc;
-			RegisterClassEx(&WndClass_Ex);
-			hWnd = CreateWindowEx(0, WndClass_Ex.lpszClassName, _T("ArkLib"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+			args.hInstance = hinst;
+			args.hPrevInstance = nullptr;
+			args.lpCmdLine = GetCommandLine();
+			args.nCmdShow = SW_SHOWDEFAULT;
+			wndclassex = wex;
+			wndclassex.hInstance =hinst;
+			wndclassex.lpfnWndProc = CallProc;
+			RegisterClassEx(&wndclassex);
+			hWnd = CreateWindowEx(0, wndclassex.lpszClassName, _T("ArkLib"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 				CW_USEDEFAULT, CW_USEDEFAULT, 640, 480, nullptr, nullptr, hinst, static_cast<LPVOID>(this));
 			ShowWindow(hWnd, SW_SHOWDEFAULT);
 			UpdateWindow(hWnd);
@@ -171,14 +171,14 @@ namespace ark {
 			}
 			return *ptr;
 		}
-		static const bool EndFlag() {
+		static const bool Exit() {
 			MSG msg;
 			if (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE)) {
 				if (msg.message != WM_QUIT) {
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
 				}
-				else Exit();
+				else ::Exit();
 			}
 			return endflag;
 		}
