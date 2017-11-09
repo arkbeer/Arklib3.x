@@ -92,6 +92,7 @@ namespace ark {
 			GetClientRect(hWnd, &rect);
 			return rect;
 		}
+		const auto& GetWinMainArguments() const{ return args; }
 #define SETFUNC(name,index) auto Set##name(const LONG lp){SetWindowLongPtr(hWnd, index, lp);return *this;}
 #define ADDFUNC(name,index) auto Add##name(const LONG lp){const LONG _lp=GetWindowLongPtr(hWnd,index);SetWindowLongPtr(hWnd, index, _lp | lp);return *this;}
 		SETFUNC(Style, GWL_STYLE)
@@ -171,16 +172,16 @@ namespace ark {
 			}
 			return *ptr;
 		}
-		static const bool Exit() {
+		static const bool Loop() {
 			MSG msg;
 			if (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE)) {
 				if (msg.message != WM_QUIT) {
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
 				}
-				else ::Exit();
+				else Exit();
 			}
-			return endflag;
+			return !endflag;
 		}
 		static const bool Exit() { endflag = true; return endflag; }
 	};
