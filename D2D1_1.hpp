@@ -36,9 +36,7 @@ namespace ark {
 			RECT rect;
 			GetClientRect(hwnd, &rect);
 			if (!CompareRect(size, rect) && D2DContext && DXGISwapChain) {
-				Microsoft::WRL::ComPtr<IDXGIDevice1> DXGIDevice;
 				Microsoft::WRL::ComPtr<ID2D1Bitmap1> D2DBitmap;
-				Microsoft::WRL::ComPtr<IDXGIFactory2> DXGIFactory;
 				Microsoft::WRL::ComPtr<IDXGISurface> DXGISurface;
 				D2DContext->SetTarget(nullptr);
 				const auto br=DXGISwapChain->ResizeBuffers(0,0,0, DXGI_FORMAT_UNKNOWN,0);
@@ -128,12 +126,12 @@ namespace ark {
 			if (hwnd == nullptr) hwnd = GetActiveWindow();
 			CreateD2DResource(hwnd);
 		}
-		void DrawClear(COLORREF color) {
+		void Clear(COLORREF color) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DContext->Clear(D2D1::ColorF(RGB(b, g, r)));
 		}
-		void DrawString(const float x, const float y, LPCWSTR lp, COLORREF color, const float f, const float size) {
+		void String(const float x, const float y, LPCWSTR lp, COLORREF color, const float f, const float size) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			IDWFactory->CreateTextFormat(L"メイリオ", NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
@@ -143,42 +141,42 @@ namespace ark {
 			IDWFormat.ReleaseAndGetAddressOf();
 		}
 
-		void DrawLine(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f, const float size) {
+		void Line(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f, const float size) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->DrawLine(D2D1::Point2F(x1, y1), D2D1::Point2F(x2, y2), D2DSCBrush.Get(), size);
 		}
-		void DrawRectangle(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f) {
+		void Rectangle(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->FillRectangle(D2D1::RectF(x1, y1, x2, y2), D2DSCBrush.Get());
 		}
-		void DrawRectangle(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f, const float size) {
+		void Rectangle(const float x1, const float y1, const float x2, const float y2, COLORREF color, const float f, const float size) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->DrawRectangle(D2D1::RectF(x1, y1, x2, y2), D2DSCBrush.Get(), size);
-		}void DrawRoundRectangle(const float x1, const float y1, const float x2, const float y2, const float rx, const float ry, COLORREF color, const float f) {
+		}void RoundRectangle(const float x1, const float y1, const float x2, const float y2, const float rx, const float ry, COLORREF color, const float f) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(x1, y1, x2, y2), rx, ry), D2DSCBrush.Get());
 		}
-		void DrawRoundRectangle(const float x1, const float y1, const float x2, const float y2, const float rx, const float ry, COLORREF color, const float f, const float size) {
+		void RoundRectangle(const float x1, const float y1, const float x2, const float y2, const float rx, const float ry, COLORREF color, const float f, const float size) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->DrawRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(x1, y1, x2, y2), rx, ry), D2DSCBrush.Get(), size);
 		}
-		void DrawEllipse(const float x, const float y, const float rx, const float ry, COLORREF color, const float f) {
+		void Ellipse(const float x, const float y, const float rx, const float ry, COLORREF color, const float f) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
 			D2DContext->FillEllipse(D2D1::Ellipse(D2D1::Point2F(x, y), rx, ry), D2DSCBrush.Get());
 		}
-		void DrawEllipse(const float x, const float y, const float rx, const float ry, COLORREF color, const float f, const float size) {
+		void Ellipse(const float x, const float y, const float rx, const float ry, COLORREF color, const float f, const float size) {
 			int r, g, b;
 			ConvertRGB(r, g, b, color);
 			D2DSCBrush->SetColor(D2D1::ColorF(RGB(b, g, r), f));
@@ -198,7 +196,7 @@ namespace ark {
 			}
 			return bitmap;
 		}
-		void DrawBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1>& bitmap, const float x1, const float y1, const float x2, const float y2, const float bx1, const float by1, const float bx2, const float by2, const float f) {
+		void Bitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1>& bitmap, const float x1, const float y1, const float x2, const float y2, const float bx1, const float by1, const float bx2, const float by2, const float f) {
 			D2DContext->DrawBitmap(bitmap.Get(), D2D1::RectF(x1, y1, x2, y2), f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, D2D1::RectF(bx1, by1, bx2, by2));
 		}
 		void Transform(D2D1::Matrix3x2F& matrix) {
@@ -217,8 +215,11 @@ namespace ark {
 			return D2D1::Matrix3x2F::Skew(anglex, angley, D2D1::Point2F(x, y));
 		}
 	public:
+		template<typename T>
+		void Shape(const T& sp, COLORREF color, const double f, const double size = 0) {
+		}
 		template<int N>
-		void DrawShape(const Shape<N>& sp, COLORREF color, const double f, const double size = 0) {
+		void Shape(const Shape2D::Shape<N>& sp, COLORREF color, const double f, const double size = 0) {
 			Microsoft::WRL::ComPtr<ID2D1PathGeometry1> PathGeometry;
 			Microsoft::WRL::ComPtr<ID2D1GeometrySink> sink;
 			D2DFactory->CreatePathGeometry(&PathGeometry);
@@ -242,21 +243,22 @@ namespace ark {
 			else D2DContext->FillGeometry(PathGeometry.Get(), D2DSCBrush.Get(), NULL);
 		}
 		template<>
-		void DrawShape(const Line& sp, COLORREF color, const double f, const double size) {
-			DrawLine(sp.Vertex[0].x, sp.Vertex[0].y, sp.Vertex[1].x, sp.Vertex[1].y, color, f, size);
+		void Shape(const Shape2D::Line& sp, COLORREF color, const double f, const double size) {
+			Line(sp.Vertex[0].x, sp.Vertex[0].y, sp.Vertex[1].x, sp.Vertex[1].y, color, f, size);
 		}
-		void Draw_Shape(const Rectangle& rc, COLORREF color, const double f, const double size) {
+		template<>
+		void Shape(const Shape2D::Rectangle& rc, COLORREF color, const double f, const double size) {
 			if (size == 0) {
-				DrawRectangle(rc.Vertex[0].x, rc.Vertex[0].y, rc.Vertex[2].x - rc.Vertex[0].x, rc.Vertex[2].y - rc.Vertex[0].y, color, f);
+				Rectangle(rc.Vertex[0].x, rc.Vertex[0].y, rc.Vertex[2].x - rc.Vertex[0].x, rc.Vertex[2].y - rc.Vertex[0].y, color, f);
 			}
-			else DrawRectangle(rc.Vertex[0].x, rc.Vertex[0].y, rc.Vertex[2].x, rc.Vertex[2].y, color, f, size);
+			else Rectangle(rc.Vertex[0].x, rc.Vertex[0].y, rc.Vertex[2].x, rc.Vertex[2].y, color, f, size);
 		}
-
-		void Draw_Shape(const Ellipse& el, COLORREF color, const double f, const double size = 0) {
+		template<>
+		void Shape(const Shape2D::Ellipse& el, COLORREF color, const double f, const double size) {
 			if (size == 0) {
-				DrawEllipse(el.Vertex[0].x, el.Vertex[0].y, el.xRadius, el.yRadius, color, f);
+				Ellipse(el.Vertex[0].x, el.Vertex[0].y, el.xRadius, el.yRadius, color, f);
 			}
-			else DrawEllipse(el.Vertex[0].x, el.Vertex[0].y, el.xRadius, el.yRadius, color, f, size);
+			else Ellipse(el.Vertex[0].x, el.Vertex[0].y, el.xRadius, el.yRadius, color, f, size);
 		}
 
 	};

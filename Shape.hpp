@@ -46,30 +46,32 @@ namespace ark {
 		ost << "(" << v2.x << "," << v2.y << ")";
 		return ost;
 	}
-	template<int N>
-	struct Shape {
-		std::array<Vec2, N> Vertex;
-		Shape(const std::array<Vec2, N>& v2) :Vertex(v2) {}
-	};
-	template<int N>
-	std::ostream& operator<<(std::ostream& ost, const Shape<N>& sp) {
-		ost << "Vertex:";
-		for (const auto& v : sp.Vertex) {
-			ost << v << std::endl;
-		}
-		return ost;
+	namespace Shape2D {
+		template<int N>
+		struct Shape {
+			std::array<Vec2, N> Vertex;
+			Shape(const std::array<Vec2, N>& v2) :Vertex(v2) {}
+		};
+		template<int N>
+		std::ostream& operator<<(std::ostream& ost, const Shape<N>& sp) {
+			ost << "Vertex:";
+			for (const auto& v : sp.Vertex) {
+				ost << v << std::endl;
+			}
+			return ost;
 
+		}
+		struct Ellipse :public Shape<1> {
+			double xRadius;
+			double yRadius;
+			Ellipse(const Vec2& v2, const double xr, const double yr) :Shape<1>({ v2 }), xRadius(xr), yRadius(yr) {}
+			Ellipse(const Vec2& v2, const double r) :Ellipse(v2, r, r) {}
+		};
+		struct Rectangle :public Shape<4> {
+			Rectangle(const Vec2& v2, const double width, const double height) :Shape<4>({ v2,Vec2(v2.x + width,v2.y),Vec2(v2.x + width,v2.y + height),Vec2(v2.x,v2.y + height) }) {}
+		};
+		typedef Shape<2> Line;
+		typedef Shape<3> Triangle;
+		typedef Shape<4> Square;
 	}
-	struct Ellipse :public Shape<1> {
-		double xRadius;
-		double yRadius;
-		Ellipse(const Vec2& v2, const double xr, const double yr) :Shape<1>({ v2 }), xRadius(xr), yRadius(yr) {}
-		Ellipse(const Vec2& v2, const double r) :Ellipse(v2, r, r) {}
-	};
-	struct Rectangle :public Shape<4> {
-		Rectangle(const Vec2& v2, const double width, const double height) :Shape<4>({ v2,Vec2(v2.x + width,v2.y),Vec2(v2.x + width,v2.y + height),Vec2(v2.x,v2.y + height) }) {}
-	};
-	typedef Shape<2> Line;
-	typedef Shape<3> Triangle;
-	typedef Shape<4> Square;
 }
