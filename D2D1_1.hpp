@@ -215,6 +215,7 @@ namespace ark {
 			return D2D1::Matrix3x2F::Skew(anglex, angley, D2D1::Point2F(x, y));
 		}
 	public:
+#ifdef SHAPE_HEADER
 		template<typename T>
 		void Shape(const T& sp, COLORREF color, const double f, const double size = 0) {
 		}
@@ -260,6 +261,6 @@ namespace ark {
 			}
 			else Ellipse(el.Vertex[0].x, el.Vertex[0].y, el.xRadius, el.yRadius, color, f, size);
 		}
-
+#endif
 	};
 }

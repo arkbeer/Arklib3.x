@@ -1,4 +1,5 @@
 #pragma once
+#define SHAPE_HEADER
 #include<iostream>
 #include<array>
 #include<cmath>
