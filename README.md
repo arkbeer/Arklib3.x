@@ -27,7 +27,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	return 0;
 }
 ```
-
 ## 2. Key.hpp
 ### 概要
 windowsにおけるキー制御の為のクラス
@@ -152,18 +151,44 @@ FPS制御を行います
         WinMainの引数を返す
     - Set / Add Functions
         ```c++
-        WinClass* SetStyle(LONG)
-        WinClass* SetExStyle(LONG)
-        WinClass* SetCursor(LONG)
-        WinClass* SetIcon(LONG)
-        WinClass* SetIconSM(LONG)
+        WinClass& SetStyle(LONG)
+        WinClass& SetExStyle(LONG)
+        WinClass& SetCursor(LONG)
+        WinClass& SetIcon(LONG)
+        WinClass& SetIconSM(LONG)
+        WinClass& SetTitle(LPCTSTR lp)
+        WinClass& SetSize(int x,int y)
+        const bool SetWindowElements(int index, LONG lp)
+        const bool SetWndClassExElements(int index, LONG lp)
+        const bool SetWindowPosition(HWND z, int x, int y, int cx, int cy, UINT uf = SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW)
         ```
         各パラメータを設定する関数
         ```c++
-        WinClass* GetStyle(LONG)
-        WinClass* GetExStyle(LONG)
-        WinClass* GetCursor(LONG)
-        WinClass* GetIcon(LONG)
-        WinClass* GetIconSM(LONG)
+        WinClass& GetStyle(LONG)
+        WinClass& GetExStyle(LONG)
+        WinClass& GetCursor(LONG)
+        WinClass& GetIcon(LONG)
+        WinClass& GetIconSM(LONG)
         ```
-        各パラメータ要素を追加する関数
+        各パラメータ要素を取得する関数
+        
+        ```c++
+        WinClass& LockAspectRatio(const float xratio, const float yratio)
+        ```
+        アスペクト比を設定する関数
+        
+        ```c++
+        const bool Loop()
+        ```
+        ループさせる関数
+## 8. D2D1_1.hpp
+### 概要
+描画をDirect2D1.1を使って行います
+
+### クラス
+- D2D1_1
+    ```c++
+    D2D1_1()
+    //no option
+    ```
+    
