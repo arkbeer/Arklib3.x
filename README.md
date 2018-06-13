@@ -10,6 +10,24 @@
 メインとなるソースコードを記入する為のcppファイル
 ここにwinMain等を書く用に設計しているが、別段このファイルである必要性はない
 
+### サンプル
+```=c++
+#include<iostream>
+#include<string>
+#include"WinMain.hpp"
+#include"Fps.hpp"
+ark::Fps fps;
+ark::WinClass wc;
+int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+	wc.AddStyle(WS_THICKFRAME).SetTitle(_T("Win32API Example")).SetSize(640, 480);
+	while (wc.Loop()) {
+		auto s = std::chrono::steady_clock::now();
+		fps.Count();
+	}
+	return 0;
+}
+```
+
 ## 2. Key.hpp
 ### 概要
 windowsにおけるキー制御の為のクラス
