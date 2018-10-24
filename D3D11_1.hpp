@@ -55,7 +55,7 @@ namespace ark {
 		DirectX::XMMATRIX Projection;
 		RECT rect;
 		HWND hwnd;
-		const auto CompileShaderFromFile(LPCTSTR szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel){
+		const auto CompileShaderFromFile(LPCTSTR szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel) {
 			DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 #ifdef _DEBUG
 			dwShaderFlags |= D3DCOMPILE_DEBUG;
@@ -202,7 +202,7 @@ namespace ark {
 				D3D11_SHADER_DESC saddesc{};
 				reflect->GetDesc(&saddesc);
 				std::vector<D3D11_INPUT_ELEMENT_DESC> element;
-				for (int i = 0; i<saddesc.InputParameters; ++i) {
+				for (int i = 0; i < saddesc.InputParameters; ++i) {
 					D3D11_SIGNATURE_PARAMETER_DESC sigdesc{};
 					reflect->GetInputParameterDesc(i, &sigdesc);
 					const auto format = GetDxgiFormat(sigdesc.ComponentType, sigdesc.Mask);
@@ -243,7 +243,7 @@ namespace ark {
 			}
 			else return true;
 		}
-		void SetTexture(Texture& tex,ark::WIC::Image& i) {
+		void SetTexture(Texture& tex, ark::WIC::Image& i) {
 			if (d3d11device && !tex.texture) {
 				D3D11_TEXTURE2D_DESC desc{};
 				desc.Width = i.getwidth();
@@ -259,12 +259,12 @@ namespace ark {
 				initdata.pSysMem = i.getdata();
 				initdata.SysMemPitch = i.stride();
 				initdata.SysMemSlicePitch = i.size();
-				auto hr=d3d11device->CreateTexture2D(&desc, &initdata, &tex.texture);
+				auto hr = d3d11device->CreateTexture2D(&desc, &initdata, &tex.texture);
 				D3D11_SHADER_RESOURCE_VIEW_DESC rdesc{};
 				rdesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 				rdesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 				rdesc.Texture2D.MipLevels = 1;
-				hr=d3d11device->CreateShaderResourceView(tex.texture.Get(), &rdesc, &tex.resourceview);
+				hr = d3d11device->CreateShaderResourceView(tex.texture.Get(), &rdesc, &tex.resourceview);
 
 				D3D11_SAMPLER_DESC sdesc{};
 				sdesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -274,7 +274,7 @@ namespace ark {
 				sdesc.MaxAnisotropy = 1;
 				sdesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 				sdesc.MaxLOD = D3D11_FLOAT32_MAX;
-				hr=d3d11device->CreateSamplerState(&sdesc, &tex.sampler);
+				hr = d3d11device->CreateSamplerState(&sdesc, &tex.sampler);
 				d3d11context->PSSetSamplers(0, 1, tex.sampler.GetAddressOf());
 			}
 		}
@@ -293,7 +293,7 @@ namespace ark {
 			d3d11context->ClearRenderTargetView(rendertarget.Get(), color.data());
 			d3d11context->ClearDepthStencilView(depthstencilview.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		}
-		void DrawCube(const DirectX::XMMATRIX& matrix, const Texture& tex,const std::array<Tex,24>& t) {
+		void DrawCube(const DirectX::XMMATRIX& matrix, const Texture& tex, const std::array<Tex, 24>& t) {
 			std::array< Vertex, 4 * 6> vertices{
 				Vertex{ Vec4{ -1.0f, -1.0f, -1.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f },t.at(0) },
 				Vertex{ Vec4{ -1.0f, -1.0f, 1.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f },t.at(1) },
@@ -372,7 +372,7 @@ namespace ark {
 
 
 		}
-		void DrawCube(const DirectX::XMMATRIX& matrix,const Texture& tex) {
+		void DrawCube(const DirectX::XMMATRIX& matrix, const Texture& tex) {
 			std::array<Tex, 4 * 6> t{
 				Tex{ 0.333f,0.5f } ,
 				{ 0.0f,0.5f },
@@ -402,9 +402,66 @@ namespace ark {
 				{ 0.667f,1.0f } ,
 				{ 0.333f,1.0f } ,
 				{ 0.333f,0.75f } ,
-				{ 0.667f,0.75f } 
+				{ 0.667f,0.75f }
 			};
 			DrawCube(matrix, tex, t);
+		}
+		void DrawPane(const DirectX::XMMATRIX& matrix, const Texture& tex, const std::array<Tex, 4>& t) {
+			std::array< Vertex, 4 > vertices{
+				Vertex{ Vec4{ -0.5f, -0.5f, 0.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f },t.at(0) },
+				Vertex{ Vec4{ -0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f },t.at(1) },
+				Vertex{ Vec4{ 0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f } , t.at(2) },
+				Vertex{ Vec4{ 0.5f, -0.5f, 0.0f, 1.0f },{ 1.0f,1.0f,1.0f,1.0f } ,t.at(3) }
+			};
+			D3D11_BUFFER_DESC vdesc{};
+			vdesc.ByteWidth = sizeof(vertices);
+			vdesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+			D3D11_SUBRESOURCE_DATA vdata{};
+			vdata.pSysMem = vertices.data();
+			d3d11device->CreateBuffer(&vdesc, &vdata, &vertexbuffer);
+			const UINT s = sizeof(Vertex);
+			const UINT o = 0;
+			d3d11context->IASetVertexBuffers(0, 1, vertexbuffer.GetAddressOf(), &s, &o);
+
+			std::array<UINT, 6> indexes{
+				0,1,2,2,3,0
+			};
+			D3D11_BUFFER_DESC idesc{};
+			idesc.ByteWidth = sizeof(indexes);
+			idesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			D3D11_SUBRESOURCE_DATA idata{};
+			idata.pSysMem = indexes.data();
+			d3d11device->CreateBuffer(&idesc, &idata, &indexbuffer);
+			d3d11context->IASetIndexBuffer(indexbuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			d3d11context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+			ConstantBuffer buff;
+			buff.Model = matrix;
+			buff.View = View;
+			buff.Projection = Projection;
+
+			buff.Model = DirectX::XMMatrixTranspose(buff.Model);
+			buff.View = DirectX::XMMatrixTranspose(buff.View);
+			buff.Projection = DirectX::XMMatrixTranspose(buff.Projection);
+
+
+			d3d11context->UpdateSubresource(constantbuffer.Get(), 0, nullptr, &buff, 0, 0);
+			d3d11context->VSSetConstantBuffers(0, 1, constantbuffer.GetAddressOf());
+			d3d11context->PSSetShaderResources(0, 1, tex.resourceview.GetAddressOf());
+
+			d3d11context->DrawIndexed(6, 0, 0);
+
+		}
+		void DrawPane(const DirectX::XMMATRIX& matrix, const Texture& tex) {
+			std::array<Tex, 4> t{
+				Tex{ 0.0f,1.0f },
+				Tex{ 0.0f,0.0f },
+				Tex{ 1.0f,0.0f },
+				Tex{ 1.0f,1.0f }
+			};
+			DrawPane(matrix, tex, t);
 		}
 #define SET(data) void Set##data(const DirectX::XMMATRIX& matrix){data=matrix;}
 #define GET(data) const auto Get##data(){return data;}

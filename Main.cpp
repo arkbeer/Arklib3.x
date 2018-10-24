@@ -93,8 +93,9 @@ int Main() {
 			d.SetView(View);
 		}
 		static float angle = 0.0f;
-		d.DrawCube(ark::Matrix().Identity().Scaling(0.8,0.8,0.8).GetMatrix(), tex);
-		d.DrawCube(ark::Matrix().Identity().Scaling(0.3, 0.3, 0.3).RotationZ(angle).Translation(-4, 0, 0).RotationY(angle * 2).RotationX(angle * 3).GetMatrix(), tex);
+		//d.DrawCube(ark::Matrix().Identity().Scaling(0.8,0.8,0.8).GetMatrix(), tex);
+		//d.DrawCube(ark::Matrix().Identity().Scaling(0.3, 0.3, 0.3).RotationZ(angle).Translation(-4, 0, 0).RotationY(angle * 2).RotationX(angle * 3).GetMatrix(), tex);
+		d.DrawPane(ark::Matrix().Identity().Scaling(1, 1, 1).GetMatrix(), tex);
 		angle += 0.01f;
 
 		d.EndDraw();
